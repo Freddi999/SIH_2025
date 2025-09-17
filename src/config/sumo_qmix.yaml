@@ -1,0 +1,27 @@
+# SUMO + QMIX training configuration
+
+env: sumo
+
+env_args:
+  net_file: "maps/connaught_place.net.xml"
+  route_file: "maps/connaught_place.rou.xml"
+  cfg_path: "maps/connaught_place.sumocfg"
+  map_path: "maps/connaught_place.net.xml"
+  step_length: 1.0
+  decision_interval: 5
+  episode_limit: 720
+  use_gui: False
+
+# QMIX Hyperparameters
+hidden_dim: 64
+lr: 0.0005
+gamma: 0.99
+buffer_size: 5000
+batch_size: 32
+n_episodes: 500
+target_update_interval: 20
+print_interval: 10
+
+# Logging
+save_dir: "./models"
+log_stats: True

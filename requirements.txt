@@ -1,0 +1,21 @@
+# Core
+numpy==1.26.4
+pandas==2.2.2
+matplotlib==3.9.0
+
+# Deep Learning
+torch==2.3.0
+torchvision==0.18.0
+
+# RL Framework (PyMARL2 needs these)
+hydra-core==1.3.2
+omegaconf==2.3.0
+tensorboard==2.17.0
+
+# SUMO interaction
+traci==1.19.0
+sumolib==1.19.0
+
+# Utils
+tqdm==4.66.4
+PyYAML==6.0.1
