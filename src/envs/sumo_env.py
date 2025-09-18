@@ -4,18 +4,21 @@ import numpy as np
 from envs.multiagentenv import MultiAgentEnv
 
 class SUMOEnv(MultiAgentEnv):
-    def __init__(self, args):
+    def __init__(self, args, control_tls=True):
         super().__init__()
+        self.control_tls = control_tls
         self.args = args
         self.net_file = args.env_args.get("map_path", "./maps/connaught_place.net.xml")
         self.cfg_file = args.env_args.get("cfg_path", "./maps/connaught_place.sumocfg")
         self.step_length = args.env_args.get("step_length", 1.0)
         self.decision_interval = args.env_args.get("decision_interval", 5)
         self.episode_limit = args.env_args.get("episode_limit", 720)
+        self.use_gui = args.env_args.get("use_gui", False) 
         self.time = 0
 
         # Start SUMO
-        sumo_cmd = ["sumo", "-c", self.cfg_file, "--step-length", str(self.step_length), "--no-warnings"]
+        binary = "sumo-gui" if self.use_gui else "sumo"
+        sumo_cmd = [binary, "-c", self.cfg_file, "--step-length", str(self.step_length), "--no-warnings"]
         traci.start(sumo_cmd)
 
         self.tls_ids = traci.trafficlight.getIDList()
@@ -57,29 +60,42 @@ class SUMOEnv(MultiAgentEnv):
 
 
     def step(self, actions):
-    # Apply actions (set phases)
-        for i, tls in enumerate(self.tls_ids):
-            if i < len(actions):
-                # ⚡ Clamp action to range for this specific TLS
-                n_actions_tls = self.tls_action_counts[tls]
-                phase_idx = actions[i] % n_actions_tls
-                try:
-                    traci.trafficlight.setPhase(tls, phase_idx)
-                except Exception:
-                    pass
+        if self.control_tls and actions is not None:
+        # Apply actions (set phases)
+            for i, tls in enumerate(self.tls_ids):
+                if i < len(actions):
+                    # ⚡ Clamp action to range for this specific TLS
+                    n_actions_tls = self.tls_action_counts[tls]
+                    phase_idx = actions[i] % n_actions_tls
+                    try:
+                        traci.trafficlight.setPhase(tls, phase_idx)
+                    except Exception:
+                        pass
 
-        # Advance SUMO by decision interval
-        for _ in range(self.decision_interval):
+            # Advance SUMO by decision interval
+            for _ in range(self.decision_interval):
+                traci.simulationStep()
+                self.time += 1
+
+            obs = self.get_obs()
+            state = self.get_state()
+            reward = self._compute_reward()
+            done = self.time >= self.episode_limit
+            info = {}
+
+            return state,obs, reward, done, info
+        else:
+            # If not controlling TLS, just step the simulation
             traci.simulationStep()
             self.time += 1
 
-        obs = self.get_obs()
-        state = self.get_state()
-        reward = self._compute_reward()
-        done = self.time >= self.episode_limit
-        info = {}
+            obs = self.get_obs()
+            state = self.get_state()
+            reward = self._compute_reward()
+            done = self.time >= self.episode_limit
+            info = {}
 
-        return state,obs, reward, done, info
+            return state, obs, reward, done, info
 
     def get_obs(self):
         obs = []
