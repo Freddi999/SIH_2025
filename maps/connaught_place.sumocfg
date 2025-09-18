@@ -1,2 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<configuration><input><net-file value="connaught_place.net.xml" /><route-files value="connaught_place.rou.xml" /></input><time><begin value="0" /><end value="3600" /><step-length value="1.0" /></time></configuration>
+<configuration>
+    <input>
+        <net-file value="connaught_place.net.xml" />
+        <route-files value="connaught_place.rou.xml" />
+    </input>
+    <time>
+        <begin value="0" />
+        <end value="3600" />
+        <step-length value="1.0" />
+    </time>
+    <processing>
+        <ignore-route-errors value="true" />
+        <time-to-teleport value="300" />
+    </processing>
+    <report>
+        <no-warnings value="true" />
+        <duration-log.disable value="true" />
+    </report>
+</configuration>
