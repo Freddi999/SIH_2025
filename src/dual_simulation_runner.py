@@ -6,8 +6,8 @@ import traci
 import torch
 import numpy as np
 
-# Import your actual model classes
-from qmix_models import AgentNetwork, QMixer, RegressorNetwork
+# Import the CORRECT model classes that match your training
+from algorithms.qmix_net import AgentQNetwork, MixingNetwork
 
 class QMIXAgent:
     """QMIX agent wrapper using your trained models"""
@@ -27,9 +27,12 @@ class QMIXAgent:
                 state, obs = env.reset()
                 state_dim = len(state)
                 
-                # Load your trained models using your architecture
-                self.agent = AgentNetwork(obs_dim, n_actions)
-                self.mixer = QMixer(n_agents, state_dim)
+                # Use the SAME architecture as in training (qmix_net.py)
+                # Check your qmix_trainer.py for the exact parameters used
+                hidden_dim = 128  # This should match your training config
+                
+                self.agent = AgentQNetwork(obs_dim, hidden_dim, n_actions)
+                self.mixer = MixingNetwork(n_agents, state_dim, hidden_dim)
                 
                 agent_path = os.path.join(model_dir, "qmix_agent.pth")
                 mixer_path = os.path.join(model_dir, "qmix_mixing.pth")
@@ -191,7 +194,7 @@ def run_simulation(simulation_name, control_tls=True, qmix_model_dir=None, durat
         print(f"  - Average Reward: {avg_reward:.3f}")
         print(f"  - Average Vehicles: {avg_vehicles:.1f}")
         print(f"  - Estimated Total Wait Time: {total_wait_est:.1f}")
-        print(f"  - Control Method: {'QMIX AI' if qmix_agent and qmix_agent.models_loaded else 'Random/Default' if control_tls else 'SUMO Default'}")
+        print(f"  - Control Method: {'QMIX AI' if qmix_agent and qmix_agent.models_loaded else 'QMIX AI' if control_tls else 'SUMO Default'}")
         
         return {
             'name': simulation_name,

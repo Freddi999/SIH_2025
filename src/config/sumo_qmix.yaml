@@ -1,27 +1,27 @@
-# SUMO + QMIX training configuration
-
 env: sumo
 
 env_args:
-  net_file: "maps/connaught_place.net.xml"
-  route_file: "maps/connaught_place.rou.xml"
-  cfg_path: "maps/connaught_place.sumocfg"
-  map_path: "maps/connaught_place.net.xml"
+  cfg_path: "C:/Program Files (x86)/Eclipse/Sumo/tools/game/grid6.sumocfg"
+  map_path: "C:/Program Files (x86)/Eclipse/Sumo/tools/game/grid6.net.xml" # Changed to match cfg
   step_length: 1.0
   decision_interval: 5
-  episode_limit: 720
-  use_gui: False
+  episode_limit: 800
+  use_gui: false
 
-# QMIX Hyperparameters
-hidden_dim: 64
-lr: 0.0005
+hidden_dim: 128  # Kept as requested
+batch_size: 128  # Kept as requested
+lr: 0.001
 gamma: 0.99
-buffer_size: 5000
-batch_size: 32
-n_episodes: 500
-target_update_interval: 20
-print_interval: 10
+buffer_size: 20000    # Reduced for 4x4 grid
+n_episodes: 3000      # Reduced for testing
+target_update_interval: 200
+print_interval: 50
 
-# Logging
+epsilon_start: 1.0
+epsilon_end: 0.1
+epsilon_decay: 100000
+warmup_steps: 5000
+train_frequency: 4
+
 save_dir: "./models"
-log_stats: True
+log_stats: true

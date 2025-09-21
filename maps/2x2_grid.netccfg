@@ -1,0 +1,8 @@
+<configuration>
+    <grid-network>
+        <grid.number value="2"/>
+        <grid.length value="200"/>
+        <grid.attach-length value="100"/>
+    </grid-network>
+    <output-file value="grid_2x2.net.xml"/>
+</configuration>

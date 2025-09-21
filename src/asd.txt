@@ -1,8 +1,0 @@
-1. Running Default SUMO Simulation...
-Step #0.00C:\Users\Sudhit\Documents\Study Material\SIH\src\envs\sumo_env.py:26: UserWarning: Call to deprecated function getAllProgramLogics, use getCompleteRedYellowGreenDefinition instead.
-  self.n_actions = max(len(traci.trafficlight.getCompleteRedYellowGreenDefinition(tls)[0].phases)
-SUMO GUI is running. Close the GUI to terminate.
- (0ms ?*RT. ?UPS, TraCI: 17ms, vehicles TOT 0 ACT 0 BUF 0)
-Step #0.00C:\Users\Sudhit\Documents\Study Material\SIH\src\envs\sumo_env.py:42: UserWarning: Call to deprecated function getAllProgramLogics, use getCompleteRedYellowGreenDefinition instead.
-  tls: len(traci.trafficlight.getCompleteRedYellowGreenDefinition(tls)[0].phases)
- (17ms ~= 58.82*RT, ~58.82UPS, TraCI: 547ms, vehicles TOT 1 ACT 1 BUF 0)
